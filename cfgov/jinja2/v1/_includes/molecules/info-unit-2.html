@@ -88,12 +88,7 @@
             <a class="m-info-unit_heading-link"
                href="{{ parse_links( value.links[0].url ) | safe }}">
         {%- endif %}
-                <{{ value.heading.level -}}>
-                    {% if value.heading.icon %}
-                        {% include 'icons/' ~ value.heading.icon ~ '.svg' %}
-                    {% endif %}
-                    {{ value.heading.text | safe }}
-                </{{ value.heading.level }}>
+                {% include_block value.heading %}
         {%- if link_image_and_heading %}
             </a>
         {%- endif -%}
