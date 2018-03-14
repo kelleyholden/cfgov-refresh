@@ -25,7 +25,7 @@
         'credit cards': 'credit-card',
         'credit reporting': 'credit-report',
         'credit reports and scores': 'loan',
-        'data, research & reports': 'chart',
+        'data, research, and reports': 'chart',
         'debt collection': 'debt-collection',
         'events': 'date',
         'families and money': 'money',
@@ -47,15 +47,13 @@
         'press release': 'bullhorn',
         'report': 'chart',
         'speech': 'microphone',
-        'student loans': 'paying-college',
+        'student loans': 'college',
         'testimony': 'left-quote',
       }
     %}
-    {% set icon = icons[category | lower] %}
-    {% if icon %}
-    {#<span class="cf-icon {{ icon + ( '-round' if is_round else '' ) }}
-                 cf-icon__before
-                 {{ additional_classes or '' }}"></span>#}
-    {% include 'icons/' ~ icon ~ '.svg' %}
+    {% set icon_name = icons[category | lower] %}
+    {% set icon_file = icon_name ~ ( '-round' if is_round else '' ) ~ '.svg' %}
+    {% if icon_name %}
+        {% include 'icons/' ~ icon_file %}
     {% endif %}
 {% endmacro %}
