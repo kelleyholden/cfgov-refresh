@@ -16,7 +16,7 @@
 
    ========================================================================== #}
 
-{% macro render(category, additional_classes, is_round) %}
+{% macro render(category, is_round) %}
     {% set icons = {
         'at the cfpb': 'bullhorn',
         'auto loans': 'buying-car',
@@ -52,8 +52,7 @@
       }
     %}
     {% set icon_name = icons[category | lower] %}
-    {% set icon_file = icon_name ~ ( '-round' if is_round else '' ) ~ '.svg' %}
     {% if icon_name %}
-        {% include 'icons/' ~ icon_file %}
+        {{ svg_icon( icon_name ~ ( '-round' if is_round else '' ) ) | safe }}
     {% endif %}
 {% endmacro %}

@@ -24,9 +24,9 @@
 {% macro render(type, is_visible, message, explanation=none) %}
 
   {% set type_lookup  = {
-        'success' : 'approved',
-        'warning' : 'error',
-        'error'   : 'delete',
+        'success' : 'approved-round',
+        'warning' : 'warning-round',
+        'error'   : 'error-round',
       }
   %}
   {% set icon = type_lookup[type]  %}
