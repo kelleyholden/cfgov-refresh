@@ -1,6 +1,7 @@
 from django import template
 from django.template import loader
 
+
 register = template.Library()
 
 
