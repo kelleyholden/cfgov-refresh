@@ -24,13 +24,16 @@
 {% macro render(type, is_visible, message, explanation=none) %}
 
   {% set type_lookup  = {
-        'success' : 'approved-round',
-        'warning' : 'warning-round',
-        'error'   : 'error-round',
+        'default': 'information-round',
+        'success': 'approved-round',
+        'warning': 'warning-round',
+        'error':   'error-round',
       }
   %}
   {% set icon = type_lookup[type]  %}
-  {% set type = ('m-notification__' + type | string) if type else '' %}
+  {% set type = ('m-notification__' + type | string)
+     if type and type != 'default'
+     else '' %}
 
   <div class="m-notification
               {{ type }}

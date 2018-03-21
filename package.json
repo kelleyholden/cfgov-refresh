@@ -65,6 +65,7 @@
     "psi": "3.1.0",
     "require-dir": "1.0.0",
     "sauce-connect-tunnel": "0.2.1",
+    "svg-inline-loader": "0.8.0",
     "through2": "2.0.3",
     "timelinejs": "2.35.6",
     "uglifyjs-webpack-plugin": "1.2.3",

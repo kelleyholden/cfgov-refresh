@@ -16,19 +16,20 @@ const EventObserver = require( '../modules/util/EventObserver' );
  *
  * @param {HTMLNode} element
  *   The DOM element within which to search for the organism.
+ * @param {Notification} _notification Instance of Notification associated
+ *   with this form.
  * @param {string} baseClass class of organism
  * @param {Object} opts optional params, including
  *   validator: validation function, and
  *   replaceForm: Boolean, determines if form is replaced with message
  * @returns {FormSubmit} An instance.
  */
-function FormSubmit( element, baseClass, opts ) {
+function FormSubmit( element, _notification, baseClass, opts ) {
   opts = opts || {};
   let UNDEFINED;
   const _baseElement = atomicHelpers.checkDom( element, baseClass );
   const _formElement = _baseElement.querySelector( 'form' );
   const _notificationElement = _baseElement.querySelector( '.m-notification' );
-  const _notification = new Notification( _baseElement );
   let _cachedFields;
   const eventObserver = new EventObserver();
   const self = this;
