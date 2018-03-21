@@ -1,13 +1,13 @@
+{{!-- TODO: Seems like this file is not used anymore and should be deleted. --}}
 <section class="input-graded block__border-bottom u-mb20">
   <div class="u-mt20 u-mb20 u-clearfix">
     <section class="input-with-btns">
       <div class="input-with-btns_input">
         {{#if input.required}}
-            <span class="short-desc">{{input.text}}</span>
+          <span class="short-desc">{{input.text}}</span>
         {{else}}
-            <input type="text" value="{{input.text}}" placeholder="{{placeholder}}">
+          <input type="text" value="{{input.text}}" placeholder="{{placeholder}}">
         {{/if}}
-        
       </div>
 
       <div class="input-with-btns_btns">
@@ -16,7 +16,9 @@
           <button class="btn btn__grouped {{#if is_1}}active{{/if}}">{{grades.[1]}}</button>
           <button class="btn btn__grouped-last {{#if is_2}}active{{/if}}">{{grades.[2]}}</button>
           {{#unless input.required}}
-          <span class="btn-input-delete cf-form_input-icon cf-icon cf-icon-delete-round" role="button" title="Delete"></span>
+          <span class="btn-input-delete cf-form_input-icon" role="button" title="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200" class="cf-icon-svg"><path d="M500 105.2c-276.1 0-500 223.9-500 500s223.9 500 500 500 500-223.9 500-500-223.9-500-500-500zm261.8 692.2c19.4 19.6 19.3 51.3-.3 70.7-19.5 19.3-50.9 19.3-70.4 0L499.6 676.6 308 868.1c-19.6 19.4-51.3 19.3-70.7-.3-19.3-19.5-19.3-50.9 0-70.4l191.6-191.5-191.6-191.6c-19.3-19.8-18.9-51.4.9-70.7 19.4-18.9 50.4-18.9 69.8 0l191.6 191.5 191.5-191.5c19.6-19.4 51.3-19.3 70.7.3 19.3 19.5 19.3 50.9 0 70.4L570.3 605.9l191.5 191.5z"/></svg>
+          </span>
           {{/unless}}
         </label>
       </div>
@@ -26,7 +28,7 @@
         <p>{{{input.explanation}}}</p>
       </div>
       {{/if}}
-      
+
     </section>
   </div>
 </section>
