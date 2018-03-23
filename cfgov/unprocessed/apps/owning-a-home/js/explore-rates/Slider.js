@@ -1,8 +1,8 @@
 // Required modules.
-const atomicHelpers = require( '../../../../js/modules/util/atomic-helpers' );
-const standardType = require( '../../../../js/modules/util/standard-type' );
+import * as atomicHelpers from '../../../../js/modules/util/atomic-helpers';
+import * as standardType from '../../../../js/modules/util/standard-type';
 
-import * as $ from 'jquery';
+const $ = require( 'jquery' );
 
 import { sliderLabel } from './template-loader';
 import * as domValues from './dom-values';
