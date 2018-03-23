@@ -3,6 +3,7 @@ const rateChecker = require( BASE_JS_PATH + 'js/explore-rates/rate-checker' );
 
 const HTML_SNIPPET = `
   <div class="rate-checker">
+<<<<<<< HEAD
     <div id="rate-results">
       <div id="accessible-data-results">
         <table id="accessible-data">
@@ -63,6 +64,12 @@ const HTML_SNIPPET = `
         </section>
       </div>
     </div>
+=======
+    <input type="range"
+           id="credit-score"
+           class="a-range">
+    <div id="slider-range"></div>
+>>>>>>> Add Slider tests and move to own class
   </div>
 `;
 

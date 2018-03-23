@@ -25,9 +25,10 @@ const dropdown = require( '../dropdown-utils' );
 const fetchRates = require( '../rates' );
 const params = require( './params' );
 
-import 'rangeslider.js';
 import './tab';
 import '../placeholder-polyfill';
+const Slider = require( './Slider' );
+let slider;
 
 // Load our handlebar templates.
 const template = require( './template-loader' );
@@ -65,24 +66,6 @@ let loanAmountResultDom;
 let accessibleDataTableHeadDom;
 let accessibleDataTableBodyDom;
 
-// Set some properties for the credit score slider.
-var slider = {
-  $el:    $( '#credit-score' ),
-  min:    params.getVal( 'credit-score' ),
-  max:    params.getVal( 'credit-score' ) + 20,
-  step:   20,
-  update: function() {
-    var leftVal = +Number( $( '.rangeslider__handle' ).css( 'left' ).replace( 'px', '' ) );
-    this.min = domValues.getSelection( 'credit-score' );
-    if ( this.min === 840 || this.min === '840' ) {
-      this.max = this.min + 10;
-    } else {
-      this.max = this.min + 19;
-    }
-    $( '#slider-range' ).text( template.sliderLabel( this ) ).css( 'left', leftVal - 9 + 'px' );
-  }
-};
-
 // options object
 // dp-constant: track the down payment interactions
 // request: Keep the latest AJAX request accessible so we can terminate it if need be.
@@ -113,8 +96,8 @@ function getData() {
   var promise = fetchRates( {
     price:          params.getVal( 'house-price' ),
     loan_amount:    params.getVal( 'loan-amount' ),
-    minfico:        slider.min,
-    maxfico:        slider.max,
+    minfico:        slider.getMin(),
+    maxfico:        slider.getMax(),
     state:          params.getVal( 'location' ),
     rate_structure: params.getVal( 'rate-structure' ),
     loan_term:      params.getVal( 'loan-term' ),
@@ -799,6 +782,7 @@ function addCommas( value ) {
 }
 
 /**
+<<<<<<< HEAD
  * Initialize the range slider. http://andreruffert.github.io/rangeslider.js/
  * @param {Function} cb - Optional callback.
  */
@@ -829,6 +813,25 @@ function renderSlider( cb ) {
   if ( cb ) {
     cb();
   }
+=======
+ * Render chart data in an accessible format.
+ * @param {Object} data - Data processed from the API.
+ */
+function renderAccessibleData( data ) {
+  var $tableHead = $( '#accessible-data .table-head' );
+  var $tableBody = $( '#accessible-data .table-body' );
+
+  $tableHead.empty();
+  $tableBody.empty();
+
+  $.each( data.labels, function( index, value ) {
+    $tableHead.append( '<th>' + value + '</th>' );
+  } );
+
+  $.each( data.vals, function( index, value ) {
+    $tableBody.append( '<td>' + value + '</td>' );
+  } );
+>>>>>>> Add Slider tests and move to own class
 }
 
 /**
@@ -953,6 +956,19 @@ function renderChart( data, cb ) {
   return; // eslint-disable-line consistent-return
 }
 
+/**
+ * Event handler for when slider is released.
+ */
+function onSlideEndHandler() {
+  params.update();
+  if( params.getVal( 'credit-score' ) < 620 ) {
+    removeAlerts();
+    scoreWarning();
+  } else {
+    updateView();
+    removeCreditScoreAlert();
+  }
+}
 
 /**
  * Initialize the rate checker app.
@@ -964,6 +980,7 @@ function init() {
     return false;
   }
 
+<<<<<<< HEAD
   // Record timestamp HTML element that's updated from date from API.
   timeStampDom = document.querySelector( '#timestamp' );
 
@@ -974,6 +991,16 @@ function init() {
   accessibleDataTableBodyDom = accessibleDataDom.querySelector( '.table-body' );
 
   renderSlider();
+=======
+  slider = new Slider( document.querySelector( '#credit-score' ) );
+  const creditScore = params.getVal( 'credit-score' );
+  const sliderTextDom = document.querySelector( '#slider-range' );
+  slider.init(
+    creditScore, creditScore + 20, sliderTextDom, onSlideEndHandler
+  );
+  slider.render();
+
+>>>>>>> Add Slider tests and move to own class
   renderChart();
   renderLoanAmountResult();
   setSelections( { usePlaceholder: true } );
