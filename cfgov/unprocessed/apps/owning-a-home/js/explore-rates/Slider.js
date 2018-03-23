@@ -2,7 +2,7 @@
 const atomicHelpers = require( '../../../../js/modules/util/atomic-helpers' );
 const standardType = require( '../../../../js/modules/util/standard-type' );
 
-const $ = require( 'jquery' );
+import * as $ from 'jquery';
 
 import { sliderLabel } from './template-loader';
 import * as domValues from './dom-values';
