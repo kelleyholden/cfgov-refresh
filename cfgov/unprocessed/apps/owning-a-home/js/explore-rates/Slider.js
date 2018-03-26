@@ -1,11 +1,11 @@
 // Required modules.
-import * as atomicHelpers from '../../../../js/modules/util/atomic-helpers';
-import * as standardType from '../../../../js/modules/util/standard-type';
-
-const $ = require( 'jquery' );
-
+import { checkDom, setInitFlag }
+  from '../../../../js/modules/util/atomic-helpers';
+import { UNDEFINED }
+  from '../../../../js/modules/util/standard-type';
+import { jquery as $ } from 'jquery';
 import { sliderLabel } from './template-loader';
-import * as domValues from './dom-values';
+import { getSelection as domValues } from './dom-values';
 import 'rangeslider.js';
 
 /**
@@ -88,7 +88,7 @@ function Slider( element ) {
     const leftVal = +Number(
       handle.style.left = handle.style.left.replace( 'px', '' )
     );
-    _min = domValues.getSelection( 'credit-score' );
+    _min = getSelection( 'credit-score' );
     if ( _min === 840 || _min === '840' ) {
       _max = _min + 10;
     } else {
