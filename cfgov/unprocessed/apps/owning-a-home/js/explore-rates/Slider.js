@@ -3,10 +3,11 @@ import { checkDom, setInitFlag }
   from '../../../../js/modules/util/atomic-helpers';
 import { UNDEFINED }
   from '../../../../js/modules/util/standard-type';
-import { jquery as $ } from 'jquery';
+import $ from 'jquery';
 import { sliderLabel } from './template-loader';
-import { getSelection as domValues } from './dom-values';
+import { getSelection } from './dom-values';
 import 'rangeslider.js';
+
 
 /**
  * Footer
@@ -21,7 +22,7 @@ import 'rangeslider.js';
 function Slider( element ) {
 
   const BASE_CLASS = 'a-range';
-  const _dom = atomicHelpers.checkDom( element, BASE_CLASS );
+  const _dom = checkDom( element, BASE_CLASS );
   let _min;
   let _max;
   let _onSlideEndHandler;
@@ -36,7 +37,7 @@ function Slider( element ) {
    *   or undefined if it was already initialized.
    */
   function init( min, max, sliderTextDom, onSlideEndHandler ) {
-    if ( !atomicHelpers.setInitFlag( _dom ) ) {
+    if ( !setInitFlag( _dom ) ) {
       return standardType.UNDEFINED;
     }
 
