@@ -38,7 +38,7 @@ function Slider( element ) {
    */
   function init( min, max, sliderTextDom, onSlideEndHandler ) {
     if ( !setInitFlag( _dom ) ) {
-      return standardType.UNDEFINED;
+      return UNDEFINED;
     }
 
     _min = min;
