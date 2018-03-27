@@ -43,24 +43,10 @@ function Slider( element ) {
 
     _min = min;
     _max = max;
-    _onSlideEndHandler = onSlideEndHandler;
     _sliderTextDom = sliderTextDom;
+    _onSlideEndHandler = onSlideEndHandler;
 
     return this;
-  }
-
-  /**
-   * @returns {number} Minimum value of the range.
-   */
-  function getMin() {
-    return _min;
-  }
-
-  /**
-   * @returns {number} Maximum value of the range.
-   */
-  function getMax() {
-    return _max;
   }
 
   /**
@@ -104,8 +90,8 @@ function Slider( element ) {
   }
 
   this.init = init;
-  this.getMin = getMin;
-  this.getMax = getMax;
+  this.min = () => _min;
+  this.max = () => _max;
   this.render = render;
 
   return this;

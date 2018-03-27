@@ -30,17 +30,17 @@ describe( 'explore-rates/Slider', () => {
     } );
   } );
 
-  describe( 'getMin()', () => {
+  describe( 'min()', () => {
     it( 'should return minimum value of the range slider', () => {
       slider.init( 0, 100, sliderTextDom );
-      expect( slider.getMin() ).toBe( 0 );
+      expect( slider.min() ).toBe( 0 );
     } );
   } );
 
-  describe( 'getMax()', () => {
+  describe( 'max()', () => {
     it( 'should return maximum value of the range slider', () => {
       slider.init( 0, 100, sliderTextDom );
-      expect( slider.getMax() ).toBe( 100 );
+      expect( slider.max() ).toBe( 100 );
     } );
   } );
 

@@ -96,8 +96,8 @@ function getData() {
   var promise = fetchRates( {
     price:          params.getVal( 'house-price' ),
     loan_amount:    params.getVal( 'loan-amount' ),
-    minfico:        slider.getMin(),
-    maxfico:        slider.getMax(),
+    minfico:        slider.min(),
+    maxfico:        slider.max(),
     state:          params.getVal( 'location' ),
     rate_structure: params.getVal( 'rate-structure' ),
     loan_term:      params.getVal( 'loan-term' ),
