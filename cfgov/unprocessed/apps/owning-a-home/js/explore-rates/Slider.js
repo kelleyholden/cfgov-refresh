@@ -67,24 +67,6 @@ function Slider( element ) {
         }
       }
     );
-
-    /*
-    $( '#' + element.id ).rangeslider( {
-      polyfill:    false,
-      rangeClass:  'rangeslider',
-      fillClass:   'rangeslider__fill',
-      handleClass: 'rangeslider__handle',
-      onInit: () => {
-        _update();
-      },
-      onSlide: ( position, value ) => {
-        _update();
-      },
-      onSlideEnd: ( position, value ) => {
-        _onSlideEndHandler();
-      }
-    } );
-    */
   }
 
   function _update() {
