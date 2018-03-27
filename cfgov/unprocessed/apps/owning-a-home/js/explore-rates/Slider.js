@@ -3,10 +3,9 @@ import { checkDom, setInitFlag }
   from '../../../../js/modules/util/atomic-helpers';
 import { UNDEFINED }
   from '../../../../js/modules/util/standard-type';
-import $ from 'jquery';
 import { sliderLabel } from './template-loader';
 import { getSelection } from './dom-values';
-import 'rangeslider.js';
+import rangesliderJs from 'rangeslider-js'
 
 
 /**
@@ -53,6 +52,23 @@ function Slider( element ) {
    * Initialize the range slider. http://andreruffert.github.io/rangeslider.js/
    */
   function render() {
+    rangesliderJs.create(
+      _dom, {
+        min: _min,
+        max: _max,
+        onInit: () => {
+          _update();
+        },
+        onSlide: ( position, value ) => {
+          _update();
+        },
+        onSlideEnd: ( position, value ) => {
+          _onSlideEndHandler();
+        }
+      }
+    );
+
+    /*
     $( '#' + element.id ).rangeslider( {
       polyfill:    false,
       rangeClass:  'rangeslider',
@@ -68,6 +84,7 @@ function Slider( element ) {
         _onSlideEndHandler();
       }
     } );
+    */
   }
 
   function _update() {
