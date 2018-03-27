@@ -32,8 +32,6 @@ class RegulationPage(RoutablePageMixin, CFGOVPage):
     def get_template(self, request):
         return 'browse-basic/index.html'
 
-    regdown = RegDownTextField(default='regdown text')
-
     header = StreamField([
         ('text_introduction', molecules.TextIntroduction()),
     ], blank=True)
@@ -49,7 +47,6 @@ class RegulationPage(RoutablePageMixin, CFGOVPage):
     content_panels = CFGOVPage.content_panels + [
         StreamFieldPanel('header'),
         FieldPanel('regulation', Part),
-        FieldPanel('regdown', classname="full"),
     ]
 
     secondary_nav_exclude_sibling_pages = models.BooleanField(default=False)
@@ -72,11 +69,14 @@ class RegulationPage(RoutablePageMixin, CFGOVPage):
 
     @route(r'^(?P<part_label>[0-9]+)/(?P<section_label>[0-9A-za-z-]+)$')
     def part_section_page(self, request, part_label, section_label):
+        content = RegDownTextField(default='regdown text')
         part = Part.objects.get(part_number=part_label)
         subpart = Subpart.objects.get(label=section_label)
         context = self.get_context(request)
         context['part'] = part.get_effective_version()
         context['subpart'] = subpart.get_effective_version()
+        context['content'] = content
+
         return TemplateResponse(
             request,
             self.get_template(request),

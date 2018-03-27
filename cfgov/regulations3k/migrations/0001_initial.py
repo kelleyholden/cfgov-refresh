@@ -3,9 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import wagtail.contrib.wagtailroutablepage.models
-import wagtail.wagtailcore.fields
-import regulations3k.models.fields
 import django.db.models.deletion
+import wagtail.wagtailcore.fields
 import wagtail.wagtailcore.blocks
 
 
@@ -22,8 +21,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('authority', models.CharField(max_length=255, blank=True)),
                 ('source', models.CharField(max_length=255, blank=True)),
-                ('effecitve_date', models.DateField(null=True, blank=True)),
+                ('effective_date', models.DateField(null=True, blank=True)),
             ],
+            options={
+                'ordering': ['effective_date'],
+            },
         ),
         migrations.CreateModel(
             name='Part',
@@ -36,6 +38,9 @@ class Migration(migrations.Migration):
                 ('letter_code', models.CharField(max_length=10)),
                 ('versions', models.ForeignKey(related_name='part_version', blank=True, to='regulations3k.EffectiveVersion', null=True)),
             ],
+            options={
+                'ordering': ['letter_code'],
+            },
         ),
         migrations.CreateModel(
             name='RegulationLandingPage',
@@ -51,7 +56,6 @@ class Migration(migrations.Migration):
             name='RegulationPage',
             fields=[
                 ('cfgovpage_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='v1.CFGOVPage')),
-                ('regdown', regulations3k.models.fields.RegDownTextField(default='regdown text')),
                 ('header', wagtail.wagtailcore.fields.StreamField([('text_introduction', wagtail.wagtailcore.blocks.StructBlock([(b'heading', wagtail.wagtailcore.blocks.CharBlock(required=False)), (b'intro', wagtail.wagtailcore.blocks.RichTextBlock(required=False)), (b'body', wagtail.wagtailcore.blocks.RichTextBlock(required=False)), (b'links', wagtail.wagtailcore.blocks.ListBlock(wagtail.wagtailcore.blocks.StructBlock([(b'text', wagtail.wagtailcore.blocks.CharBlock(required=False)), (b'url', wagtail.wagtailcore.blocks.CharBlock(default=b'/', required=False))]), required=False)), (b'has_rule', wagtail.wagtailcore.blocks.BooleanBlock(help_text=b'Check this to add a horizontal rule line to bottom of text introduction.', required=False, label=b'Has bottom rule'))]))], blank=True)),
                 ('content', wagtail.wagtailcore.fields.StreamField([], null=True)),
                 ('secondary_nav_exclude_sibling_pages', models.BooleanField(default=False)),
@@ -68,8 +72,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('label', models.CharField(max_length=255, blank=True)),
                 ('title', models.CharField(max_length=255, blank=True)),
-                ('contents', regulations3k.models.fields.RegDownTextField(blank=True)),
+                ('contents', models.TextField(blank=True)),
             ],
+            options={
+                'ordering': ['label'],
+            },
         ),
         migrations.CreateModel(
             name='Subpart',
@@ -80,6 +87,9 @@ class Migration(migrations.Migration):
                 ('sections', models.ForeignKey(blank=True, to='regulations3k.Section', null=True)),
                 ('version', models.ForeignKey(related_name='subpart_version', blank=True, to='regulations3k.EffectiveVersion', null=True)),
             ],
+            options={
+                'ordering': ['label'],
+            },
         ),
         migrations.AddField(
             model_name='effectiveversion',

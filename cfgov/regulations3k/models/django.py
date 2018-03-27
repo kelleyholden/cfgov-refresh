@@ -2,17 +2,32 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+from wagtail.wagtailadmin.edit_handlers import (
+    FieldPanel, FieldRowPanel, MultiFieldPanel
+)
+from wagtail.wagtailcore.fields import RichTextField
 
 from regulations3k.models.fields import RegDownTextField
 
 
+@python_2_unicode_compatible
 class Section(models.Model):
     label = models.CharField(max_length=255, blank=True)
     title = models.CharField(max_length=255, blank=True)
-    contents = RegDownTextField(blank=True)
+    contents = models.TextField(blank=True)
+
+    panels = [
+        FieldPanel('label'),
+        FieldPanel('title'),
+        FieldPanel('contents', classname="full"),
+    ]
 
     def __str__(self):
         return "{} {}".format(self.label, self.title)
+
+    class Meta:
+        ordering = ['label']
 
 
 class Subpart(models.Model):
@@ -23,20 +38,41 @@ class Subpart(models.Model):
         related_name='subpart_version')
     sections = models.ForeignKey(Section, blank=True, null=True)
 
+    panels = [
+        FieldPanel('label'),
+        FieldPanel('title'),
+        FieldPanel('version'),
+        FieldPanel('sections'),
+    ]
+
     def __str__(self):
-        return "{} {} ({})".format(self.label, self.title, self.version)
+        return "{} {} ({})".format(self.label, self.title)
+
+    class Meta:
+        ordering = ['label']
 
 
 class EffectiveVersion(models.Model):
     authority = models.CharField(max_length=255, blank=True)
     source = models.CharField(max_length=255, blank=True)
-    effecitve_date = models.DateField(blank=True, null=True)
+    effective_date = models.DateField(blank=True, null=True)
     part = models.ForeignKey('Part', blank=True, null=True)
     subparts = models.ForeignKey(Subpart, blank=True, null=True)
 
+    panels = [
+        FieldPanel('authority'),
+        FieldPanel('source'),
+        FieldPanel('effective_date'),
+        FieldPanel('part'),
+        FieldPanel('subparts'),
+    ]
+
     def __str__(self):
         return "{} {} ({})".format(
-            self.part, self.subparts, self.effecitve_date)
+            self.part, self.subparts, self.effective_date)
+
+    class Meta:
+        ordering = ['effective_date']
 
 
 class Part(models.Model):
@@ -49,8 +85,20 @@ class Part(models.Model):
         EffectiveVersion, blank=True, null=True,
         related_name='part_version')
 
+    panels = [
+        FieldPanel('cfr_title'),
+        FieldPanel('title'),
+        FieldPanel('part_number'),
+        FieldPanel('letter_code'),
+        FieldPanel('versions'),
+        FieldPanel('chapter'),
+    ]
+
     def __str__(self):
-        return self.crf_title
+        return self.cfr_title
+
+    class Meta:
+        ordering = ['letter_code']
 
     def get_parts_with_effective_version(self):
         pass
