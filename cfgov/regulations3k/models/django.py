@@ -3,12 +3,9 @@ from __future__ import absolute_import, unicode_literals
 
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, FieldRowPanel, MultiFieldPanel
-)
-from wagtail.wagtailcore.fields import RichTextField
-
-from regulations3k.models.fields import RegDownTextField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel
+# from wagtail.wagtailcore.fields import RichTextField
+# from regulations3k.models.fields import RegDownTextField
 
 
 @python_2_unicode_compatible

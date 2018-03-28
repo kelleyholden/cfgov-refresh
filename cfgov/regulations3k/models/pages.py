@@ -19,6 +19,15 @@ from v1.util.util import get_secondary_nav_items
 class RegulationLandingPage(CFGOVPage):
     """landing page for eregs"""
     objects = CFGOVPageManager()
+    regs = Part.objects.exclude(letter_code='DD')
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(CFGOVPage, self).get_context(request, *args, **kwargs)
+        context.update({
+            'regs': self.regs,
+            'dd': Part.objects.get(letter_code='DD')
+        })
+        return context
 
     def get_template(self, request):
         return 'regulations3k/base.html'
