@@ -54,17 +54,11 @@ function Slider( element ) {
   function render() {
     rangesliderJs.create(
       _dom, {
-        min: _min,
-        max: _max,
-        onInit: () => {
-          _update();
-        },
-        onSlide: ( position, value ) => {
-          _update();
-        },
-        onSlideEnd: ( position, value ) => {
-          _onSlideEndHandler();
-        }
+        min: 600,
+        max: 850,
+        onInit: () => _update(),
+        onSlide: ( position, value ) => _update(),
+        onSlideEnd: ( position, value ) => _onSlideEndHandler()
       }
     );
   }

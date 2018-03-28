@@ -1,39 +1,36 @@
-const $ = require( 'jquery' );
-const amortize = require( 'amortize' );
+import $ from 'jquery';
+import '../placeholder-polyfill';
+import './tab';
+import * as params from './params';
+import * as template from './template-loader';
+import amortize from 'amortize';
+import config from '../../config.json';
+import dropdown from '../dropdown-utils';
+import fetchRates from '../rates';
 import formatUSD from 'format-usd';
-const isNum = require( 'is-money-usd' );
-const jumbo = require( 'jumbo-mortgage' );
-const median = require( 'median' );
+import Highcharts from 'highcharts';
+import HighchartsExport from 'highcharts/modules/exporting';
+import isNum from 'is-money-usd';
+import jumbo from 'jumbo-mortgage';
+import median from 'median';
 import unFormatUSD from 'unformat-usd';
+import { applyThemeTo } from './highcharts-theme';
+import { getSelection } from './dom-values';
+import { uniquePrimitives } from '../../../../js/modules/util/array-helpers';
 import {
   calcLoanAmount,
   renderAccessibleData,
   renderDatestamp,
   renderLoanAmount
 } from './util';
+import Slider from './Slider';
 
 // Load and style Highcharts library. https://www.highcharts.com/docs.
-const Highcharts = require( 'highcharts' );
-require( 'highcharts/modules/exporting' )( Highcharts );
-const highchartsTheme = require( './highcharts-theme' );
-highchartsTheme.applyThemeTo( Highcharts );
+HighchartsExport( Highcharts );
+applyThemeTo( Highcharts );
 
-// var geolocation = require('./geolocation');
-import * as config from '../../config.json';
-import * as domValues from './dom-values';
-const dropdown = require( '../dropdown-utils' );
-const fetchRates = require( '../rates' );
-const params = require( './params' );
-
-import './tab';
-import '../placeholder-polyfill';
-const Slider = require( './Slider' );
+// Range slider for credit rating.
 let slider;
-
-// Load our handlebar templates.
-const template = require( './template-loader' );
-
-import { uniquePrimitives } from '../../../../js/modules/util/array-helpers';
 
 // Set some properties for the histogram.
 var chart = {
@@ -299,11 +296,11 @@ function updateLanguage( data ) {
   }
 
   function updateTerm() {
-    var termVal = domValues.getSelection( 'loan-term' );
+    var termVal = getSelection( 'loan-term' );
     $( '.rc-comparison-long .loan-years' ).text( termVal ).fadeIn();
     // change from 5 years to x if an ARM
-    if ( domValues.getSelection( 'rate-structure' ) === 'arm' ) {
-      var armVal = domValues.getSelection( 'arm-type' );
+    if ( getSelection( 'rate-structure' ) === 'arm' ) {
+      var armVal = getSelection( 'arm-type' );
       var term = armVal.match( /[^-]*/i )[0];
       $( '.rc-comparison-short .loan-years, .arm-comparison-term' ).text( term ).fadeIn();
     } else {
@@ -544,8 +541,8 @@ function processLoanAmount( element ) {
   }
 
   renderDownPayment.apply( element );
-  params.setVal( 'house-price', domValues.getSelection( 'house-price' ) );
-  params.setVal( 'down-payment', domValues.getSelection( 'down-payment' ) );
+  params.setVal( 'house-price', getSelection( 'house-price' ) );
+  params.setVal( 'down-payment', getSelection( 'down-payment' ) );
   params.update();
   renderLoanAmountResult();
   checkForJumbo();
@@ -592,10 +589,10 @@ function renderDownPayment() {
 
   if ( $price.val() !== 0 ) {
     if ( $el.attr( 'id' ) === 'down-payment' || options['dp-constant'] === 'down-payment' ) {
-      val = ( domValues.getSelection( 'down-payment' ) / domValues.getSelection( 'house-price' ) * 100 ) || '';
+      val = ( getSelection( 'down-payment' ) / getSelection( 'house-price' ) * 100 ) || '';
       $percent.val( Math.round( val ) );
     } else {
-      val = domValues.getSelection( 'house-price' ) * ( domValues.getSelection( 'percent-down' ) / 100 );
+      val = getSelection( 'house-price' ) * ( getSelection( 'percent-down' ) / 100 );
       val = val >= 0 ? Math.round( val ) : '';
       val = addCommas( val );
       $down.val( val );
@@ -626,7 +623,7 @@ function renderInterestAmounts() {
   var shortTermVal = [],
       longTermVal = [],
       rate,
-      fullTerm = +( domValues.getSelection( 'loan-term' ) ) * 12;
+      fullTerm = +( getSelection( 'loan-term' ) ) * 12;
   $( '.interest-cost' ).each( function( index ) {
     if ( $( this ).hasClass( 'interest-cost-primary' ) ) {
       rate = $( '#rate-compare-1' ).val().replace( '%', '' );
@@ -782,59 +779,6 @@ function addCommas( value ) {
 }
 
 /**
-<<<<<<< HEAD
- * Initialize the range slider. http://andreruffert.github.io/rangeslider.js/
- * @param {Function} cb - Optional callback.
- */
-function renderSlider( cb ) {
-  $( '#credit-score' ).rangeslider({
-    polyfill:    false,
-    rangeClass:  'rangeslider',
-    fillClass:   'rangeslider__fill',
-    handleClass: 'rangeslider__handle',
-    onInit:      function() {
-      slider.update();
-    },
-    onSlide:     function( position, value ) {
-      slider.update();
-    },
-    onSlideEnd:  function( position, value ) {
-      params.update();
-      if( params.getVal( 'credit-score' ) < 620 ) {
-        removeAlerts();
-        scoreWarning();
-      } else {
-        updateView();
-        removeCreditScoreAlert();
-      }
-    }
-  } );
-
-  if ( cb ) {
-    cb();
-  }
-=======
- * Render chart data in an accessible format.
- * @param {Object} data - Data processed from the API.
- */
-function renderAccessibleData( data ) {
-  var $tableHead = $( '#accessible-data .table-head' );
-  var $tableBody = $( '#accessible-data .table-body' );
-
-  $tableHead.empty();
-  $tableBody.empty();
-
-  $.each( data.labels, function( index, value ) {
-    $tableHead.append( '<th>' + value + '</th>' );
-  } );
-
-  $.each( data.vals, function( index, value ) {
-    $tableBody.append( '<td>' + value + '</td>' );
-  } );
->>>>>>> Add Slider tests and move to own class
-}
-
-/**
  * Render (or update) the Highcharts chart.
  * @param  {Object} data Data processed from the API.
  * @param  {Function} cb Optional callback.
@@ -980,7 +924,14 @@ function init() {
     return false;
   }
 
-<<<<<<< HEAD
+  slider = new Slider( document.querySelector( '#credit-score' ) );
+  const creditScore = params.getVal( 'credit-score' );
+  const sliderTextDom = document.querySelector( '#slider-range' );
+  slider.init(
+    creditScore, creditScore + 20, sliderTextDom, onSlideEndHandler
+  );
+  slider.render();
+
   // Record timestamp HTML element that's updated from date from API.
   timeStampDom = document.querySelector( '#timestamp' );
 
@@ -990,17 +941,6 @@ function init() {
   accessibleDataTableHeadDom = accessibleDataDom.querySelector( '.table-head' );
   accessibleDataTableBodyDom = accessibleDataDom.querySelector( '.table-body' );
 
-  renderSlider();
-=======
-  slider = new Slider( document.querySelector( '#credit-score' ) );
-  const creditScore = params.getVal( 'credit-score' );
-  const sliderTextDom = document.querySelector( '#slider-range' );
-  slider.init(
-    creditScore, creditScore + 20, sliderTextDom, onSlideEndHandler
-  );
-  slider.render();
-
->>>>>>> Add Slider tests and move to own class
   renderChart();
   renderLoanAmountResult();
   setSelections( { usePlaceholder: true } );
