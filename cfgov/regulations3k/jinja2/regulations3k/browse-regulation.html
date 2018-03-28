@@ -1,0 +1,35 @@
+{% extends 'layout-side-nav.html' %}
+
+{% import 'form_block.html' as form_block with context %}
+{% import 'organisms/featured-content.html' as featured_content %}
+{% import 'templates/render_block.html' as render_block with context %}
+{% import 'templates/streamfield-sidefoot.html' as streamfield_sidefoot with context %}
+
+{% block content_main_modifiers -%}
+    {{ super() }} content__flush-bottom
+{%- endblock %}
+
+{% block content_main %}
+    <h1>{{section.title}}</h1>
+    <div>
+        {{content|safe}}
+    </div>
+
+    {% if page.sidefoot %}
+        <aside class="o-prefooter">
+            {{ streamfield_sidefoot.render(page.sidefoot, half_width=true) }}
+        </aside>
+    {% endif %}
+
+    <aside class="content_sidebar content__flush-top-on-small
+    content__flush-sides-on-small">
+    <ul>
+        {% for link in sibling_links %}
+        <li>
+            <a href="{{link.url}}">{{link.text}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    </aside>
+
+{% endblock %}

@@ -9,8 +9,10 @@ from wagtail.wagtailadmin.edit_handlers import (
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.models import PageManager
 
-from regulations3k.models.fields import RegDownTextField
-from regulations3k.models import Part, Subpart
+# Our RegDownTextField field doesn't generate a good widget yet
+# from regulations3k.models.fields import RegDownTextField
+from regulations3k.models import Part, Subpart, Section
+from regulations3k.regdown import regdown
 from v1.models import CFGOVPage, CFGOVPageManager
 from v1.atomic_elements import molecules
 from v1.util.util import get_secondary_nav_items
@@ -38,8 +40,7 @@ class RegulationPage(RoutablePageMixin, CFGOVPage):
 
     objects = PageManager()
 
-    def get_template(self, request):
-        return 'browse-basic/index.html'
+    template = 'browse-basic/index.html'
 
     header = StreamField([
         ('text_introduction', molecules.TextIntroduction()),
@@ -76,17 +77,23 @@ class RegulationPage(RoutablePageMixin, CFGOVPage):
         context.update({'regulation': self.regulation})
         return context
 
-    @route(r'^(?P<part_label>[0-9]+)/(?P<section_label>[0-9A-za-z-]+)$')
-    def part_section_page(self, request, part_label, section_label):
-        content = RegDownTextField(default='regdown text')
-        part = Part.objects.get(part_number=part_label)
-        subpart = Subpart.objects.get(label=section_label)
+    @route(r'^(?P<section_label>[0-9A-Za-z-]+)/$')
+    def section_page(self, request, section_label):
+
+        self.template = 'regulations3k/browse-regulation.html'
+
+        # part = Part.objects.get(part_number=part_label)
+        section = Section.objects.get(label=section_label)
         context = self.get_context(request)
-        context['part'] = part.get_effective_version()
-        context['subpart'] = subpart.get_effective_version()
-        context['content'] = content
+        context.update({
+            # 'part': part.get_effective_version(),
+            'subpart': Subpart.objects.get(
+                label=section_label.replace('-', '.')),
+            'section': Section.objects.get(label=section_label),
+            'content': regdown(section.contents),
+        })
 
         return TemplateResponse(
             request,
-            self.get_template(request),
+            self.template,
             context)

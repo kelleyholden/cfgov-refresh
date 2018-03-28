@@ -43,7 +43,7 @@ class Subpart(models.Model):
     ]
 
     def __str__(self):
-        return "{} {} ({})".format(self.label, self.title)
+        return "{} {}".format(self.label, self.title)
 
     class Meta:
         ordering = ['label']
